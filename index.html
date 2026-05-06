@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memorial Day — Honoring Those Who Gave All</title>
+<style>
+  :root {
+    --navy: #0a1428;
+    --navy-2: #122244;
+    --bone: #f4f1e8;
+    --bone-dim: #cfc9b8;
+    --red: #b22234;
+    --gold: #c9a24a;
+    --line: #2a3a5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--navy);
+    color: var(--bone);
+    line-height: 1.6;
+  }
+
+  /* CA banner */
+  .ca-banner {
+    background: #000;
+    color: var(--bone);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    border-bottom: 1px solid var(--gold);
+  }
+  .ca-label { color: var(--gold); letter-spacing: 1px; }
+  .ca-address {
+    color: var(--bone);
+    background: #111;
+    padding: 4px 10px;
+    border-radius: 3px;
+    word-break: break-all;
+  }
+  .ca-copy {
+    background: var(--gold);
+    color: #000;
+    border: 0;
+    padding: 5px 14px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background 0.15s;
+  }
+  .ca-copy:hover { background: #e6bf60; }
+  .ca-copy.copied { background: #6a8e3f; color: var(--bone); }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 90px 20px 80px;
+    background:
+      linear-gradient(180deg, rgba(10,20,40,0.55), rgba(10,20,40,0.95)),
+      radial-gradient(circle at 50% 30%, rgba(201,162,74,0.2), transparent 60%);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 12px;
+  }
+  .hero .rule {
+    width: 80px; height: 2px; background: var(--gold);
+    margin: 22px auto;
+  }
+  .hero .tagline {
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--bone-dim);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .hero .last-monday {
+    margin-top: 28px;
+    color: var(--gold);
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Sections */
+  section { padding: 70px 20px; border-bottom: 1px solid var(--line); }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .section-title {
+    font-size: 2rem;
+    text-align: center;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bone);
+    margin-bottom: 8px;
+  }
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--gold);
+    margin: 18px auto 0;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--bone-dim);
+    font-style: italic;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* History */
+  .history-grid {
+    display: grid;
+    gap: 30px;
+  }
+  .history-block {
+    background: var(--navy-2);
+    padding: 28px 32px;
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+  }
+  .history-block h3 {
+    color: var(--gold);
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .history-block p { color: var(--bone-dim); }
+  .history-block p + p { margin-top: 12px; }
+
+  .moment {
+    background: linear-gradient(135deg, var(--navy-2), #1a2e54);
+    border-left-color: var(--red);
+    text-align: center;
+  }
+  .moment h3 { color: var(--red); }
+  .moment .time {
+    font-size: 2rem;
+    color: var(--bone);
+    letter-spacing: 4px;
+    margin: 10px 0;
+  }
+
+  /* Charities */
+  .charity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 22px;
+  }
+  .charity-card {
+    background: var(--navy-2);
+    padding: 26px;
+    border-radius: 4px;
+    border-top: 3px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .charity-card:hover {
+    transform: translateY(-3px);
+    border-top-color: var(--red);
+  }
+  .charity-card h3 {
+    color: var(--bone);
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .charity-card p {
+    color: var(--bone-dim);
+    font-size: 0.95rem;
+    flex: 1;
+    margin-bottom: 20px;
+  }
+  .charity-card a {
+    align-self: flex-start;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 9px 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: background 0.15s, color 0.15s;
+  }
+  .charity-card a:hover {
+    background: var(--gold);
+    color: #000;
+  }
+
+  /* Disclosure */
+  .disclosure {
+    background: #1a1208;
+    border: 1px solid #4a3618;
+    color: var(--bone-dim);
+    padding: 22px 26px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    margin-top: 40px;
+    line-height: 1.7;
+  }
+  .disclosure strong { color: var(--gold); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--bone-dim);
+    font-size: 0.85rem;
+    background: #050a18;
+  }
+  footer p + p { margin-top: 8px; }
+  footer .small { font-size: 0.75rem; opacity: 0.7; }
+
+  @media (max-width: 600px) {
+    .ca-banner { font-size: 11px; }
+    .hero { padding: 60px 16px 50px; }
+    section { padding: 50px 16px; }
+    .history-block { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Contract Address Banner -->
+<div class="ca-banner">
+  <span class="ca-label">SOLANA CA:</span>
+  <span class="ca-address" id="ca">2MZbnTD4MdLjzwBmyRB4pdiTZK5SuHkj2TBW4Vy7SYUK</span>
+  <button class="ca-copy" id="copyBtn" onclick="copyCA()">COPY</button>
+</div>
+
+<!-- Hero -->
+<header class="hero">
+  <h1>Memorial Day</h1>
+  <div class="rule"></div>
+  <p class="tagline">"The legacy of heroes is the memory of a great name and the inheritance of a great example."</p>
+  <p class="last-monday">Observed the last Monday of May</p>
+</header>
+
+<!-- History -->
+<section id="history">
+  <div class="container">
+    <h2 class="section-title">The History of Memorial Day</h2>
+    <p class="section-sub">A solemn American tradition born from the nation's deadliest war.</p>
+
+    <div class="history-grid">
+
+      <div class="history-block">
+        <h3>Origins After the Civil War</h3>
+        <p>Memorial Day traces its roots to the years following the American Civil War (1861&ndash;1865), the deadliest conflict in U.S. history, which claimed an estimated 620,000 lives. In communities across the country, both North and South, mourning families and citizens began the practice of decorating the graves of fallen soldiers with flowers, wreaths, and small flags.</p>
+        <p>Several towns claim to have held the earliest commemorations. In 1966, the federal government officially recognized Waterloo, New York, as the birthplace of Memorial Day, citing its community-wide observance on May 5, 1866.</p>
+      </div>
+
+      <div class="history-block">
+        <h3>Decoration Day &mdash; May 30, 1868</h3>
+        <p>The first nationally recognized observance came on May 30, 1868. General John A. Logan, leader of the Grand Army of the Republic (a veterans' organization for Union soldiers), issued General Order No. 11, designating the day "for the purpose of strewing with flowers, or otherwise decorating the graves of comrades who died in defense of their country."</p>
+        <p>Known as Decoration Day, May 30 was reportedly chosen because it was not the anniversary of any particular battle, and because flowers would be in bloom across the country.</p>
+      </div>
+
+      <div class="history-block">
+        <h3>From Decoration Day to Memorial Day</h3>
+        <p>After World War I, the holiday's scope expanded to honor American service members who died in all wars, not only those of the Civil War. The name "Memorial Day" gradually replaced "Decoration Day" through the early 20th century, and Memorial Day was declared the official federal name by an act of Congress in 1967.</p>
+        <p>The Uniform Monday Holiday Act, passed in 1968 and effective in 1971, moved Memorial Day to the last Monday of May, establishing the three-day weekend observed today.</p>
+      </div>
+
+      <div class="history-block">
+        <h3>Memorial Day vs. Veterans Day</h3>
+        <p>The two holidays are often confused but honor different groups. <strong>Memorial Day</strong>, observed in May, honors the men and women who died while serving in the U.S. military. <strong>Veterans Day</strong>, observed on November 11, honors all who have served in the armed forces, living or deceased.</p>
+        <p>Armed Forces Day, observed in mid-May, honors those currently serving in active duty.</p>
+      </div>
+
+      <div class="history-block moment">
+        <h3>National Moment of Remembrance</h3>
+        <p class="time">3:00 PM</p>
+        <p>Established by Congress in 2000, the National Moment of Remembrance asks all Americans to pause for one minute at 3:00 p.m. local time on Memorial Day to remember and honor those who have died in service to the nation.</p>
+      </div>
+
+      <div class="history-block">
+        <h3>Traditions of Remembrance</h3>
+        <p>Memorial Day is marked by visits to cemeteries and memorials, the placing of American flags on the graves of fallen service members at national cemeteries, and the laying of a wreath at the Tomb of the Unknown Soldier at Arlington National Cemetery.</p>
+        <p>The American flag is flown at half-staff from sunrise until noon, then raised to full-staff for the remainder of the day &mdash; symbolizing the nation rising in resolve to honor the fallen by continuing the fight for the freedom for which they died. Many observances also include the playing of "Taps."</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Charities -->
+<section id="charities">
+  <div class="container">
+    <h2 class="section-title">Where Creator Rewards Go</h2>
+    <p class="section-sub">100% of the creator rewards earned by this token are donated to the five organizations below &mdash; chosen for their direct impact on fallen service members' families, wounded veterans, and military families in need.</p>
+
+    <div class="charity-grid">
+
+      <div class="charity-card">
+        <h3>Tunnel to Towers Foundation</h3>
+        <p>Builds mortgage-free smart homes for catastrophically injured veterans and first responders, and pays off mortgages for the families of fallen heroes. Founded in honor of FDNY firefighter Stephen Siller, who died on 9/11.</p>
+        <a href="https://t2t.org" target="_blank" rel="noopener noreferrer">Visit &amp; Donate &rarr;</a>
+      </div>
+
+      <div class="charity-card">
+        <h3>Folds of Honor</h3>
+        <p>Awards educational scholarships to the spouses and children of America's fallen and disabled service members, helping the families left behind continue toward their goals.</p>
+        <a href="https://foldsofhonor.org" target="_blank" rel="noopener noreferrer">Visit &amp; Donate &rarr;</a>
+      </div>
+
+      <div class="charity-card">
+        <h3>Wounded Warrior Project</h3>
+        <p>Provides free programs and services for post-9/11 wounded, ill, and injured veterans &mdash; including mental health support, career counseling, peer connection, and long-term physical rehabilitation.</p>
+        <a href="https://www.woundedwarriorproject.org" target="_blank" rel="noopener noreferrer">Visit &amp; Donate &rarr;</a>
+      </div>
+
+      <div class="charity-card">
+        <h3>Fisher House Foundation</h3>
+        <p>Builds comfort homes near major military and VA medical centers so military and veteran families can stay free of charge while a loved one is in treatment. Has provided more than ten million nights of free lodging.</p>
+        <a href="https://fisherhouse.org" target="_blank" rel="noopener noreferrer">Visit &amp; Donate &rarr;</a>
+      </div>
+
+      <div class="charity-card">
+        <h3>Gary Sinise Foundation</h3>
+        <p>Serves the nation's defenders, veterans, first responders, and their families through programs including specially adapted smart homes built for the most severely wounded veterans.</p>
+        <a href="https://www.garysinisefoundation.org" target="_blank" rel="noopener noreferrer">Visit &amp; Donate &rarr;</a>
+      </div>
+
+    </div>
+
+    <div class="disclosure">
+      <strong>How it works:</strong> Creator rewards generated by this token are donated to the five charities above. Donations will be made publicly from a verifiable wallet so the community can confirm them on-chain. <br><br>
+      <strong>Note:</strong> This project is not affiliated with, endorsed by, or sponsored by any of the listed organizations. The links above go directly to each charity's official website &mdash; you can also donate to them directly at any time.
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>&ldquo;Greater love hath no man than this, that a man lay down his life for his friends.&rdquo;</p>
+  <p>&mdash; John 15:13</p>
+  <p class="small" style="margin-top:18px;">In memory of all American service members who gave their lives in defense of this nation.</p>
+</footer>
+
+<script>
+  function copyCA() {
+    const ca = document.getElementById('ca').textContent.trim();
+    const btn = document.getElementById('copyBtn');
+    navigator.clipboard.writeText(ca).then(() => {
+      btn.textContent = 'COPIED';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 1800);
+    }).catch(() => {
+      const r = document.createRange();
+      r.selectNode(document.getElementById('ca'));
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(r);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+      btn.textContent = 'COPIED';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+</script>
+
+</body>
+</html>
