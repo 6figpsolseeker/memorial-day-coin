@@ -59,6 +59,46 @@
   .ca-copy:hover { background: #e6bf60; }
   .ca-copy.copied { background: #6a8e3f; color: var(--bone); }
 
+  /* Social links in CA banner */
+  .socials { display: inline-flex; gap: 8px; align-items: center; }
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.15s, filter 0.15s, background 0.15s;
+  }
+  .social-link:hover { transform: translateY(-1px); filter: brightness(1.15); }
+  .social-x {
+    width: 30px;
+    height: 30px;
+    background: #000;
+    border: 1px solid var(--bone-dim);
+    border-radius: 50%;
+    color: var(--bone);
+  }
+  .social-x:hover { background: var(--bone); color: #000; border-color: var(--bone); }
+  .social-x svg { width: 14px; height: 14px; }
+  .social-pump {
+    height: 30px;
+    padding: 0 12px;
+    background: #1FBF59;
+    border-radius: 999px;
+    color: #003d18;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    gap: 5px;
+  }
+  .social-pump:hover { background: #25e06a; }
+  .social-pump .dot {
+    width: 8px; height: 8px;
+    background: #003d18;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
   /* Hero */
   .hero {
     text-align: center;
@@ -284,6 +324,16 @@
   <span class="ca-label">SOLANA CA:</span>
   <span class="ca-address" id="ca">2MZbnTD4MdLjzwBmyRB4pdiTZK5SuHkj2TBW4Vy7SYUK</span>
   <button class="ca-copy" id="copyBtn" onclick="copyCA()">COPY</button>
+  <div class="socials">
+    <a class="social-link social-x" href="https://x.com/MEMDAYCTO" target="_blank" rel="noopener noreferrer" aria-label="Follow on X" title="@MEMDAYCTO on X">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M18.244 2H21.5l-7.45 8.51L23 22h-6.828l-5.347-6.99L4.7 22H1.444l7.97-9.106L1 2h6.99l4.832 6.39L18.244 2zm-1.196 18h1.892L7.05 4H5.04l12.008 16z"/>
+      </svg>
+    </a>
+    <a class="social-link social-pump" href="https://pump.fun/coin/2MZbnTD4MdLjzwBmyRB4pdiTZK5SuHkj2TBW4Vy7SYUK" target="_blank" rel="noopener noreferrer" aria-label="View on Pump.fun" title="View $MEMDAY on Pump.fun">
+      <span class="dot"></span><span>PUMP.FUN</span>
+    </a>
+  </div>
 </div>
 
 <!-- Hero -->
