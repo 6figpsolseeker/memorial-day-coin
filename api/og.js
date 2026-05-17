@@ -101,16 +101,16 @@ export default async function handler(req) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: 56,
+          marginTop: 40,
         },
       },
       h(
         'div',
-        { style: { display: 'flex', fontSize: 88, letterSpacing: 12, color: BONE, fontWeight: 700 } },
+        { style: { display: 'flex', fontSize: 76, letterSpacing: 10, color: BONE, fontWeight: 700 } },
         'MEMORIAL DAY',
       ),
       h('div', {
-        style: { display: 'flex', width: 120, height: 3, background: GOLD, marginTop: 20 },
+        style: { display: 'flex', width: 100, height: 3, background: GOLD, marginTop: 16 },
       }),
     ),
     h(
@@ -120,12 +120,12 @@ export default async function handler(req) {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: 50,
+          marginTop: 36,
         },
       },
       h(
         'div',
-        { style: { display: 'flex', fontSize: 26, color: BONE_DIM, letterSpacing: 4 } },
+        { style: { display: 'flex', fontSize: 22, color: BONE_DIM, letterSpacing: 4 } },
         'RAISED FOR VETERAN CHARITIES',
       ),
       h(
@@ -133,11 +133,11 @@ export default async function handler(req) {
         {
           style: {
             display: 'flex',
-            fontSize: 140,
+            fontSize: 104,
             color: GOLD,
             fontFamily: 'Courier New, monospace',
             fontWeight: 700,
-            marginTop: 14,
+            marginTop: 10,
             lineHeight: 1,
           },
         },
@@ -148,10 +148,10 @@ export default async function handler(req) {
         {
           style: {
             display: 'flex',
-            fontSize: 22,
+            fontSize: 20,
             color: BONE_DIM,
             fontStyle: 'italic',
-            marginTop: 16,
+            marginTop: 14,
           },
         },
         `Across ${count} verified organizations`,
@@ -159,7 +159,7 @@ export default async function handler(req) {
     ),
     h(
       'div',
-      { style: { display: 'flex', marginTop: 'auto', justifyContent: 'center' } },
+      { style: { display: 'flex', marginTop: 36, justifyContent: 'center' } },
       h(
         'div',
         {
