@@ -182,6 +182,89 @@
     text-transform: uppercase;
   }
 
+  /* Countdown to Memorial Day */
+  .countdown {
+    margin-top: 40px;
+  }
+  .countdown-label {
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .countdown-grid {
+    display: inline-flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .countdown-unit {
+    background: rgba(10, 20, 40, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 14px 18px;
+    min-width: 78px;
+  }
+  .countdown-num {
+    font-family: "Courier New", monospace;
+    font-size: 2.1rem;
+    color: var(--bone);
+    font-weight: bold;
+    line-height: 1;
+    display: block;
+  }
+  .countdown-suffix {
+    display: block;
+    margin-top: 8px;
+    color: var(--bone-dim);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .countdown-tagline {
+    margin-top: 22px;
+    color: var(--bone-dim);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+  .countdown-today {
+    margin-top: 36px;
+    padding: 24px 32px;
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    background: rgba(201, 162, 74, 0.08);
+    display: inline-block;
+  }
+  .countdown-today .small {
+    display: block;
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .countdown-today .big {
+    display: block;
+    margin-top: 10px;
+    color: var(--bone);
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .countdown-today .date {
+    display: block;
+    margin-top: 14px;
+    color: var(--bone-dim);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 600px) {
+    .countdown-grid { gap: 8px; }
+    .countdown-unit { padding: 10px 12px; min-width: 60px; }
+    .countdown-num { font-size: 1.5rem; }
+    .countdown-suffix { font-size: 0.6rem; }
+  }
+
   /* Sections */
   section { padding: 70px 20px; border-bottom: 1px solid var(--line); }
   .container { max-width: 1000px; margin: 0 auto; }
@@ -398,7 +481,24 @@
   <h1>Memorial Day</h1>
   <div class="rule"></div>
   <p class="tagline">"The legacy of heroes is the memory of a great name and the inheritance of a great example."</p>
-  <p class="last-monday">Observed the last Monday of May</p>
+  <p class="last-monday" id="lastMondayFallback">Observed the last Monday of May</p>
+
+  <div class="countdown" id="countdown" hidden>
+    <div class="countdown-label" id="countdown-target">Until Memorial Day</div>
+    <div class="countdown-grid">
+      <div class="countdown-unit"><span class="countdown-num" data-d>—</span><span class="countdown-suffix">Days</span></div>
+      <div class="countdown-unit"><span class="countdown-num" data-h>—</span><span class="countdown-suffix">Hours</span></div>
+      <div class="countdown-unit"><span class="countdown-num" data-m>—</span><span class="countdown-suffix">Minutes</span></div>
+      <div class="countdown-unit"><span class="countdown-num" data-s>—</span><span class="countdown-suffix">Seconds</span></div>
+    </div>
+    <p class="countdown-tagline">Until the nation remembers.</p>
+  </div>
+
+  <div class="countdown-today" id="countdownToday" hidden>
+    <span class="small">Today</span>
+    <span class="big">We Remember</span>
+    <span class="date" id="countdown-today-date"></span>
+  </div>
 </header>
 
 <!-- History -->
@@ -556,6 +656,59 @@
     }
   }
   loadDonations();
+
+  // Countdown to Memorial Day — last Monday of May, auto-rolls each year.
+  function memorialDayDate(year) {
+    const may31 = new Date(year, 4, 31, 0, 0, 0, 0);
+    const daysBack = (may31.getDay() + 6) % 7; // 0=Sun..6=Sat → distance back to Monday
+    return new Date(year, 4, 31 - daysBack, 0, 0, 0, 0);
+  }
+  function currentTargetMemorialDay() {
+    const now = new Date();
+    let md = memorialDayDate(now.getFullYear());
+    const endOfMd = new Date(md.getTime() + 24 * 60 * 60 * 1000 - 1);
+    if (now > endOfMd) md = memorialDayDate(now.getFullYear() + 1);
+    return md;
+  }
+  function isMemorialDayToday() {
+    const now = new Date();
+    const md = memorialDayDate(now.getFullYear());
+    return now.getFullYear() === md.getFullYear() &&
+           now.getMonth() === md.getMonth() &&
+           now.getDate() === md.getDate();
+  }
+  function tickCountdown() {
+    const fallback = document.getElementById('lastMondayFallback');
+    const countdown = document.getElementById('countdown');
+    const today = document.getElementById('countdownToday');
+    if (isMemorialDayToday()) {
+      if (fallback) fallback.hidden = true;
+      countdown.hidden = true;
+      const md = memorialDayDate(new Date().getFullYear());
+      document.getElementById('countdown-today-date').textContent =
+        md.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      today.hidden = false;
+      return;
+    }
+    today.hidden = true;
+    if (fallback) fallback.hidden = true;
+    countdown.hidden = false;
+    const target = currentTargetMemorialDay();
+    document.getElementById('countdown-target').textContent =
+      'Until Memorial Day · ' + target.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+    const diff = target - new Date();
+    if (diff < 0) return;
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff / 3600000) % 24;
+    const mins = Math.floor(diff / 60000) % 60;
+    const secs = Math.floor(diff / 1000) % 60;
+    countdown.querySelector('[data-d]').textContent = String(days);
+    countdown.querySelector('[data-h]').textContent = String(hours).padStart(2, '0');
+    countdown.querySelector('[data-m]').textContent = String(mins).padStart(2, '0');
+    countdown.querySelector('[data-s]').textContent = String(secs).padStart(2, '0');
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
 
   // Live $MEMDAY price ticker — pulls from DexScreener, refreshes every 30s.
   const MEMDAY_MINT = '2MZbnTD4MdLjzwBmyRB4pdiTZK5SuHkj2TBW4Vy7SYUK';
