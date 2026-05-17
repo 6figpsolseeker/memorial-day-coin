@@ -99,6 +99,54 @@
     display: inline-block;
   }
 
+  /* Live $MEMDAY ticker */
+  .price-ticker {
+    background: #050a18;
+    border-bottom: 1px solid var(--line);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    flex-wrap: wrap;
+    color: var(--bone);
+  }
+  .price-ticker .stat {
+    display: inline-flex;
+    gap: 6px;
+    align-items: baseline;
+    white-space: nowrap;
+  }
+  .price-ticker .stat-label {
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+  .price-ticker .stat-value {
+    color: var(--bone);
+    font-weight: bold;
+  }
+  .price-ticker .stat-value.up { color: #7fae4d; }
+  .price-ticker .stat-value.down { color: #d44a5c; }
+  .price-ticker .pulse {
+    width: 6px; height: 6px;
+    background: #7fae4d;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @media (max-width: 600px) {
+    .price-ticker { gap: 14px; font-size: 11px; padding: 8px 10px; }
+    .price-ticker .stat-label { font-size: 9px; }
+  }
+
   /* Hero */
   .hero {
     text-align: center;
@@ -336,6 +384,15 @@
   </div>
 </div>
 
+<!-- Live $MEMDAY ticker -->
+<div class="price-ticker" id="priceTicker" hidden>
+  <div class="stat"><span class="pulse"></span><span class="stat-label">$MEMDAY</span></div>
+  <div class="stat"><span class="stat-label">Price</span><span class="stat-value" data-price>—</span></div>
+  <div class="stat"><span class="stat-label">MCap</span><span class="stat-value" data-mcap>—</span></div>
+  <div class="stat"><span class="stat-label">24h Vol</span><span class="stat-value" data-vol>—</span></div>
+  <div class="stat"><span class="stat-label">24h</span><span class="stat-value" data-change>—</span></div>
+</div>
+
 <!-- Hero -->
 <header class="hero">
   <h1>Memorial Day</h1>
@@ -499,6 +556,53 @@
     }
   }
   loadDonations();
+
+  // Live $MEMDAY price ticker — pulls from DexScreener, refreshes every 30s.
+  const MEMDAY_MINT = '2MZbnTD4MdLjzwBmyRB4pdiTZK5SuHkj2TBW4Vy7SYUK';
+  function fmtPrice(p) {
+    const n = Number(p);
+    if (!isFinite(n) || n <= 0) return '—';
+    if (n < 0.0001) return '$' + n.toFixed(8);
+    if (n < 1) return '$' + n.toFixed(6);
+    return '$' + n.toFixed(4);
+  }
+  function fmtCompact(v) {
+    const n = Number(v);
+    if (!isFinite(n)) return '—';
+    if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+    if (n >= 1e3) return '$' + (n / 1e3).toFixed(1) + 'K';
+    return '$' + n.toFixed(0);
+  }
+  function fmtChange(c) {
+    const n = Number(c);
+    if (!isFinite(n)) return '—';
+    return (n >= 0 ? '+' : '') + n.toFixed(2) + '%';
+  }
+  async function loadPrice() {
+    try {
+      const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/' + MEMDAY_MINT, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const pair = (data.pairs || []).find(p => p.baseToken && p.baseToken.address === MEMDAY_MINT);
+      if (!pair) throw new Error('no pair');
+      const ticker = document.getElementById('priceTicker');
+      ticker.querySelector('[data-price]').textContent = fmtPrice(pair.priceUsd);
+      ticker.querySelector('[data-mcap]').textContent = fmtCompact(pair.marketCap || pair.fdv);
+      ticker.querySelector('[data-vol]').textContent = fmtCompact(pair.volume && pair.volume.h24);
+      const changeEl = ticker.querySelector('[data-change]');
+      const ch = pair.priceChange && pair.priceChange.h24;
+      changeEl.textContent = fmtChange(ch);
+      changeEl.classList.remove('up', 'down');
+      if (Number(ch) > 0) changeEl.classList.add('up');
+      else if (Number(ch) < 0) changeEl.classList.add('down');
+      ticker.hidden = false;
+    } catch (e) {
+      // Silent failure — ticker stays hidden rather than showing broken data.
+    }
+  }
+  loadPrice();
+  setInterval(loadPrice, 30000);
 
   function copyCA() {
     const ca = document.getElementById('ca').textContent.trim();
