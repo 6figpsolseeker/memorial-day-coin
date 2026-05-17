@@ -1,5 +1,5 @@
 {
   "buildCommand": null,
-  "installCommand": "echo skip-install",
+  "installCommand": "npm install --omit=dev --no-audit --no-fund",
   "outputDirectory": "."
 }

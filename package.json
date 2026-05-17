@@ -5,6 +5,9 @@
   "scripts": {
     "scrape": "node scripts/scrape-donations.js"
   },
+  "dependencies": {
+    "@vercel/og": "^0.6.4"
+  },
   "devDependencies": {
     "playwright": "^1.49.0",
     "playwright-extra": "^4.3.6",
