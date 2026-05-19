@@ -418,6 +418,63 @@
     font-size: 0.85rem;
     margin-left: 6px;
   }
+
+  /* Total raised banner */
+  .total-raised {
+    background: linear-gradient(135deg, var(--navy-2), #1a2e54);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 38px 28px;
+    text-align: center;
+    margin-bottom: 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .total-raised::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .total-raised-label {
+    color: var(--gold);
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .total-raised-amount {
+    font-family: "Courier New", monospace;
+    font-size: clamp(2.6rem, 8vw, 4.4rem);
+    color: var(--bone);
+    font-weight: bold;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+  .total-raised-sol {
+    color: var(--gold);
+    font-family: "Courier New", monospace;
+    font-size: 1.05rem;
+    margin-top: 14px;
+    letter-spacing: 1px;
+  }
+  .total-raised-sub {
+    color: var(--bone-dim);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 14px;
+  }
+  .total-raised-pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #7fae4d;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    animation: pulse 2s infinite;
+  }
   .last-updated {
     text-align: center;
     color: var(--bone-dim);
@@ -570,6 +627,13 @@
     <h2 class="section-title">Where Creator Rewards Go</h2>
     <p class="section-sub">Through pump.fun's Charity Coins program, creator fees on every $MEMDAY trade are split equally across the five organizations below and routed to them automatically by Donate.gg. Amounts shown are pulled live from pump.fun.</p>
 
+    <div class="total-raised">
+      <div class="total-raised-label"><span class="total-raised-pulse"></span>Total Raised To Date</div>
+      <div class="total-raised-amount" id="totalUsd">$0.00</div>
+      <div class="total-raised-sol" id="totalSol">0.00000 SOL</div>
+      <div class="total-raised-sub">Across all 5 verified veteran charities</div>
+    </div>
+
     <div class="charity-grid">
 
       <div class="charity-card" data-charity="taps">
@@ -651,14 +715,22 @@
       const res = await fetch('donations.json?v=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
+      let totalSol = 0;
+      let totalUsd = 0;
       data.charities.forEach(c => {
         const card = document.querySelector('[data-charity="' + c.key + '"]');
+        totalSol += Number(c.donated_sol) || 0;
+        totalUsd += Number(c.donated_usd) || 0;
         if (!card) return;
         const sol = card.querySelector('[data-field="sol"]');
         const usd = card.querySelector('[data-field="usd"]');
         if (sol) sol.textContent = Number(c.donated_sol).toFixed(5) + ' SOL';
         if (usd) usd.textContent = '($' + Number(c.donated_usd).toFixed(2) + ')';
       });
+      const totalUsdEl = document.getElementById('totalUsd');
+      const totalSolEl = document.getElementById('totalSol');
+      if (totalUsdEl) totalUsdEl.textContent = '$' + totalUsd.toFixed(2);
+      if (totalSolEl) totalSolEl.textContent = totalSol.toFixed(5) + ' SOL';
       const stamp = document.getElementById('last-updated');
       if (stamp && data.last_updated) {
         const d = new Date(data.last_updated);
