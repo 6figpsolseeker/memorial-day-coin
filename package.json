@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "scrape": "node scripts/scrape-donations.js"
+    "scrape": "node scripts/scrape-donations.js",
+    "post-tweet": "node scripts/post-tweet.js"
   },
   "dependencies": {
     "@vercel/og": "^0.6.4"
@@ -11,6 +12,7 @@
   "devDependencies": {
     "playwright": "^1.49.0",
     "playwright-extra": "^4.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2"
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "twitter-api-v2": "^1.29.0"
   }
 }
