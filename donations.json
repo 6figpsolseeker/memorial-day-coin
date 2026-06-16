@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-16T00:03:42.041Z",
+  "last_updated": "2026-06-16T05:36:25.146Z",
   "source_url": "https://pump.fun/coin/2MZbnTD4MdLjzwBmyRB4pdiTZK5SuHkj2TBW4Vy7SYUK",
   "scrape_status": "ok",
   "charities": [
@@ -7,32 +7,32 @@
       "key": "taps",
       "match": "Tragedy Assistance Program",
       "donated_sol": 1.4758,
-      "donated_usd": 108.98
+      "donated_usd": 108.72
     },
     {
       "key": "hope-for-the-warriors",
       "match": "Hope for the Warriors",
       "donated_sol": 1.4758,
-      "donated_usd": 108.98
+      "donated_usd": 108.72
     },
     {
       "key": "wounded-warrior-project",
       "match": "Wounded Warrior Project",
       "donated_sol": 1.4758,
-      "donated_usd": 108.98
+      "donated_usd": 108.72
     },
     {
       "key": "fisher-house",
       "match": "Fisher House Foundation",
       "donated_sol": 1.4758,
-      "donated_usd": 108.98
+      "donated_usd": 108.72
     },
     {
       "key": "gary-sinise",
       "match": "Gary Sinise Foundation",
       "donated_sol": 1.4758,
-      "donated_usd": 108.98
+      "donated_usd": 108.72
     }
   ],
-  "last_attempt": "2026-06-16T00:03:42.041Z"
+  "last_attempt": "2026-06-16T05:36:25.146Z"
 }
